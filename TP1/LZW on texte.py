@@ -63,7 +63,7 @@ if __name__ == "__main__":
     with open("data TP1/textes/texte_4.txt", "r", encoding='utf-8') as f:
         Message = f.read()
 
-    # LZW(Message)
+    LZW(Message)
 
     
 
