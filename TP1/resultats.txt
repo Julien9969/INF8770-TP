@@ -1,1 +1,9 @@
-image 1 : Longueur = 2078827, Longueur originale = 1560600.0
+Text 1 : Longueur = 74, Longueur originale = 84.0, Temps d'execution : 0.003 secondes
+
+
+
+
+Image 1 : Longueur = 2078827, Longueur originale = 1560600.0, Temps d'execution : 492.346 secondes
+
+
+

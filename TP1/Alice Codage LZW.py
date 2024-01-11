@@ -1,22 +1,16 @@
-# import numpy as np
-# from PIL import Image
-
-# np.chararray(Image.open('data TP1/images/image_1.png'))
-
-# import numpy as np
-# import matplotlib.pyplot as plt
-
-# # Open the image
-  # You might need to adjust the encoding
-
-# print(char_string)
-
 import matplotlib.pyplot as py
 import numpy as np
 from PIL import Image
 from copy import deepcopy
+import time
+
 
 def LZW(Message: np.ndarray[int]):
+    """
+    Source: GITHUB des exemple du cours (https://github.com/gabilodeau/INF8770/blob/master/Codage%20LZW.ipynb)
+    Fonction qui prend en entrée un message et qui le code avec l'algorithme LZW.
+    Message: Numpy array de int
+    """
     dictsymb =[[Message[0]]]
     dictbin = ["{:b}".format(0)]
     nbsymboles = 1
@@ -80,32 +74,17 @@ def strMessageIntoInt(Message):
 if __name__ == "__main__":
     Message = "AAAAAAA"
 
-    Message = strMessageIntoInt(Message)
-    LZW(Message)
-
-    with open("data TP1/textes/texte_4.txt", "r", encoding='utf-8') as f:
+    with open("data TP1/textes/texte_1.txt", "r", encoding='utf-8') as f:
         Message = f.read()
-
-    # byte_string = np.array(img).tobytes()
-
-    # print(byte_string)
-    # Message = byte_string.decode('latin-1')
+    
+    Message = strMessageIntoInt(Message)
+    start = time.time()
+    LZW(Message)
+    print(f"Temps d'execution : {time.time()-start: .3f} secondes")
 
     img = Image.open('data TP1/images/image_1.png')
-
-    # # imagelue = py.imread('data TP1/images/image_1.png')
-    # # image = imagelue.astype('int32')
-
     m = np.frombuffer(img.tobytes(), np.uint8)
-    # s = []
-    # for i in range(len(m)):
-    #     s.append(m[i])
-
     print(len(m))
+    start = time.time()
     LZW(m)
-        # img = Image.open('data TP1/images/image_1.png')
-
-# byte_string = np.array(img).tobytes()
-
-# # Convert the byte string to a character string
-# char_string = byte_string.decode('latin-1')
+    print(f"Temps d'execution : {time.time()-start: .3f} secondes")
