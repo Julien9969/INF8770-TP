@@ -1,0 +1,42 @@
+Texte 1
+Temps d'execution :  0.002 secondes
+Longueur = 74, Longueur originale = 84.0
+
+Texte 2
+Temps d'execution :  0.002 secondes
+Longueur = 113, Longueur originale = 154.0
+
+Texte 3
+Temps d'execution :  0.002 secondes
+Longueur = 182, Longueur originale = 204.0
+
+Texte 4
+Temps d'execution :  0.010 secondes
+Longueur = 909, Longueur originale = 910.0
+
+Texte 5
+Temps d'execution :  0.083 secondes
+Longueur = 5870, Longueur originale = 7998.0
+
+
+
+Image 1
+Temps d'execution :  581.149 secondes
+Longueur = 2078827, Longueur originale = 1560600.0
+
+Image 2
+Temps d'execution :  54.241 secondes
+Longueur = 4098, Longueur originale = 0.0
+
+Image 3
+Temps d'execution :  3033.644 secondes
+Longueur = 3067726, Longueur originale = 6976256.0
+
+Image 4
+Temps d'execution :  5462.283 secondes
+Longueur = 5095800, Longueur originale = 6000000.0
+
+Image 5
+Temps d'execution :  203.554 secondes
+Longueur = 53287, Longueur originale = 3911280.0
+

@@ -28,7 +28,7 @@ def LZW(Message: np.ndarray[int]):
     dictsymb.sort()
     # dictionnaire = { key: bin for key, bin in list(zip(dictsymb, dictbin)) }
     dictionnaire = list(zip(dictsymb, dictbin))
-    print(dictionnaire) 
+    # print(dictionnaire) 
 
     i = 0
     MessageCode = []
@@ -60,10 +60,12 @@ def LZW(Message: np.ndarray[int]):
                 dictbin[j] = "{:b}".format(j).zfill(int(np.ceil(np.log2(nbsymboles))))
         
 
-    print(MessageCode)
+    # print(MessageCode)
 
     print("Longueur = {0}".format(longueur))
     print("Longueur originale = {0}".format(longueurOriginale))
+
+    return longueur, longueurOriginale
 
 
 def strMessageIntoInt(Message):
@@ -72,19 +74,31 @@ def strMessageIntoInt(Message):
     return Message
 
 if __name__ == "__main__":
-    Message = "AAAAAAA"
+    result = ""
 
-    with open("data TP1/textes/texte_1.txt", "r", encoding='utf-8') as f:
-        Message = f.read()
+    for i in range(1, 6):
+        with open(f"data TP1/textes/texte_{i}.txt", "r", encoding='utf-8') as f:
+            Message = f.read()
+        
+        Message = strMessageIntoInt(Message)
+        start = time.time()
+        longueur, longueurOriginale = LZW(Message)
+        print(f"Temps d'execution : {time.time() - start: .3f} secondes")
+        result += f"Texte {i}\n"
+        result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n" 
     
-    Message = strMessageIntoInt(Message)
-    start = time.time()
-    LZW(Message)
-    print(f"Temps d'execution : {time.time()-start: .3f} secondes")
 
-    img = Image.open('data TP1/images/image_1.png')
-    m = np.frombuffer(img.tobytes(), np.uint8)
-    print(len(m))
-    start = time.time()
-    LZW(m)
-    print(f"Temps d'execution : {time.time()-start: .3f} secondes")
+    result += "\n\n"
+    for i in range(1, 6):
+        img = Image.open(f'data TP1/images/image_{i}.png')
+        m = np.frombuffer(img.tobytes(), np.uint8)
+        start = time.time()
+        longueur, longueurOriginale = LZW(m)
+        print(f"Temps d'execution : {time.time() - start: .3f} secondes")
+        result += f"Image {i}\n"
+        result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
+
+    with open("resultat.txt", "w") as f:
+        f.write(result)
