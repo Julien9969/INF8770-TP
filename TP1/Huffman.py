@@ -134,7 +134,7 @@ if __name__ == "__main__":
     for i in range(1, 6):
         # with open(f"TP1/data TP1/images/image_{i}.png", "rb") as image:
         #     m = base64.b64encode(image.read())
-        img = Image.open(f'TP1/data TP1/images/image_{i}.png')
+        img = Image.open(f'data TP1/images/image_{i}.png')
         message = ''
         m = np.frombuffer(img.tobytes(), np.uint8)
         for j in m:

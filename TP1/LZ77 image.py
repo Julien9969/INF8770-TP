@@ -3,17 +3,7 @@ import numpy as np
 from PIL import Image
 from copy import deepcopy
 import time
-import zlib
-
-
-
-# def rfind_sublist(lst, sublst):
-    # if len(sublst) > len(lst):
-    #     return -1
-    # for i in range(len(lst) - len(sublst), -1, -1):
-    #     if lst[i:i + len(sublst)] == sublst:
-    #         return i
-    # return -1
+import Huffman
 
 
 def rfind_sublist(lst, sublst):
@@ -70,7 +60,7 @@ def LZ77(message:np.ndarray[int], tailleDict:int):
         index += max(length+1, 1)  # Avance la position dans le message
 
         # print(triplets)
-    return len(triplets) * 3, len(message)
+    return len(triplets) * 3, len(message), triplets
 
 
 def strMessageIntoInt(Message):
@@ -79,9 +69,6 @@ def strMessageIntoInt(Message):
     return Message
 
 if __name__ == '__main__':
-
-    # print(strMessageIntoInt("AAABCBBAAA"))
-    LZ77(strMessageIntoInt("AAABCBBAAA"), 6)
     result = ""
 
     for i in range(1, 6):
@@ -92,23 +79,40 @@ if __name__ == '__main__':
         dictSize = 6
 
         start = time.time()
-        longueur, longueurOriginale = LZ77(Message, dictSize)
+        longueur, longueurOriginale, triplets = LZ77(Message, dictSize)
         print(f"Temps d'execution : {time.time() - start: .3f} secondes")
-        result += f"Texte {i}\n"
+        
+        result += f"--- Texte {i} ---\n"
         result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
-        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n" 
-    
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
 
     result += "\n\n"
     for i in range(1, 6):
+        print(f"--- Image {i} ---")
         img = Image.open(f'data TP1/images/image_{i}.png')
         m = np.frombuffer(img.tobytes(), np.uint8)
         start = time.time()
-        longueur, longueurOriginale = LZ77(m, 6)
+        longueur, longueurOriginale, triplets = LZ77(m, 6)
+
+        message = ""
+        for triplet in triplets:
+            message += chr(triplet[0])
+            message += chr(triplet[1])
+            message += chr(triplet[2])
+
         print(f"Temps d'execution : {time.time() - start: .3f} secondes")
-        result += f"Image {i}\n"
+        result += f"--- LZ77 Image {i} ---\n"
         result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
-        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
+
+        print("LZ77 done")
+        Huffman.Huffman(message)
+        result += f"\n--- LZ77 + Huffman Image {i} ---\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
+        
 
     with open("resultats-LZ77.txt", "w") as f:
         f.write(result)
