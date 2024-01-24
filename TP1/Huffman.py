@@ -114,6 +114,7 @@ def Huffman(Message: str):
 
     print('Entropie: ' + str(entropie))
     print('Taux de compression: ' + str(1 - longueur/longueurOriginale))
+    return longueur, longueurOriginale, entropie, 1 - longueur/longueurOriginale
 
 
 def strMessageIntoInt(Message):
@@ -123,13 +124,16 @@ def strMessageIntoInt(Message):
 
 
 if __name__ == "__main__":
-    # for i in range(1, 6):
-    #     with open(f'TP1/data TP1/textes/texte_{i}.txt', 'r', encoding='utf-8') as f:
-    #         Message = f.read()
-    #         print(f'\n -----CODAGE TU TEXTE {i}: ------')
-    #         Huffman(strMessageIntoInt(Message))
-    #Message = strMessageIntoInt("EBFFBEABEFCFDEBBFFFEFEFCCBFACBBABCDACDCABABBBCDDCDCAAABBBABABAABAAB")
-    #Huffman(Message)
+    result =''
+    for i in range(1, 6):
+        with open(f'TP1/data TP1/textes/texte_{i}.txt', 'r', encoding='utf-8') as f:
+            Message = f.read()
+        print(f'\n -----CODAGE TU TEXTE {i}: ------')
+        longueur, longueurOriginale, entropie, tauxCompression = Huffman(Message)
+        result += f"Texte {i}\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
+
+
 
     for i in range(1, 6):
         # with open(f"TP1/data TP1/images/image_{i}.png", "rb") as image:
@@ -140,7 +144,6 @@ if __name__ == "__main__":
         for j in m:
             message += chr(j)
         #m = np.frombuffer(img.tobytes(), np.uint8)
-        #print(message)
         print(f"--- CODAGE IMAGE {i} ---")
         start = time.time()
         Huffman(message)
