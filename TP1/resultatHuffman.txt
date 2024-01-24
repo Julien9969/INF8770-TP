@@ -1,0 +1,60 @@
+Texte 1
+Longueur = 84, Longueur originale = 84.0
+Entropie = 0.41381685030363374
+Taux de compression = 0.0
+Temps d'execution :  0.001 secondes
+
+Texte 2
+Longueur = 118, Longueur originale = 154.0
+Entropie = 1.281796403314599
+Taux de compression = 0.23376623376623373
+Temps d'execution :  0.001 secondes
+
+Texte 3
+Longueur = 131, Longueur originale = 204.0
+Entropie = 2.543101603600466
+Taux de compression = 0.3578431372549019
+Temps d'execution :  0.002 secondes
+
+Texte 4
+Longueur = 739, Longueur originale = 910.0
+Entropie = 4.024326276200251
+Taux de compression = 0.1879120879120879
+Temps d'execution :  0.004 secondes
+
+Texte 5
+Longueur = 5601, Longueur originale = 7998.0
+Entropie = 4.170085812310875
+Taux de compression = 0.2996999249812453
+Temps d'execution :  0.018 secondes
+
+Image 1
+Longueur = 1429129, Longueur originale = 1560600.0
+Entropie = 7.288243465666147
+Taux de compression = 0.08424388055875942
+Temps d'execution :  9.394 secondes
+
+Image 2
+Longueur = 0, Longueur originale = 0.0
+Entropie = 0.0
+Taux de compression = nan
+Temps d'execution :  0.137 secondes
+
+Image 3
+Longueur = 3741655, Longueur originale = 6976256.0
+Entropie = 4.262784398901795
+Taux de compression = 0.46365858707019925
+Temps d'execution :  36.308 secondes
+
+Image 4
+Longueur = 5812390, Longueur originale = 6000000.0
+Entropie = 7.727589190364511
+Taux de compression = 0.03126833333333334
+Temps d'execution :  32.183 secondes
+
+Image 5
+Longueur = 1191542, Longueur originale = 3911280.0
+Entropie = 1.7428578343880088
+Taux de compression = 0.6953575300157493
+Temps d'execution :  4.250 secondes
+
