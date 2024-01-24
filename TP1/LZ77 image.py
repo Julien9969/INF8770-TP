@@ -108,12 +108,14 @@ if __name__ == '__main__':
         result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
 
         print("LZ77 done")
-        Huffman.Huffman(message)
+        longueur, longueurOriginale, entropie, taux = Huffman.Huffman(message)
         result += f"\n--- LZ77 + Huffman Image {i} ---\n"
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
-        result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
-        
+        result += f"Entropie = {entropie}\n"
+        result += f'Taux de compression: {str(taux)}\n\n\n'
+
 
     with open("resultats-LZ77.txt", "w") as f:
         f.write(result)
 
+ 

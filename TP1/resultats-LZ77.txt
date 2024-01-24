@@ -1,42 +1,87 @@
-Texte 1
+--- Texte 1 ---
 Temps d'execution :  0.001 secondes
 Longueur = 36, Longueur originale = 84
+Taux de compression: 0.5714285714285714
 
-Texte 2
+--- Texte 2 ---
 Temps d'execution :  0.002 secondes
 Longueur = 45, Longueur originale = 77
+Taux de compression: 0.4155844155844156
 
-Texte 3
+--- Texte 3 ---
 Temps d'execution :  0.002 secondes
 Longueur = 72, Longueur originale = 51
+Taux de compression: -0.41176470588235303
 
-Texte 4
-Temps d'execution :  0.014 secondes
+--- Texte 4 ---
+Temps d'execution :  0.015 secondes
 Longueur = 411, Longueur originale = 182
+Taux de compression: -1.2582417582417582
 
-Texte 5
-Temps d'execution :  0.164 secondes
+--- Texte 5 ---
+Temps d'execution :  0.106 secondes
 Longueur = 2967, Longueur originale = 1333
+Taux de compression: -1.225806451612903
 
 
 
-Image 1
-Temps d'execution :  35.268 secondes
+--- LZ77 Image 1 ---
+Temps d'execution :  11.372 secondes
 Longueur = 294123, Longueur originale = 195075
+Taux de compression: -0.5077431757016533
 
-Image 2
-Temps d'execution :  0.083 secondes
+
+--- LZ77 + Huffman Image 1 ---
+Longueur = 1422906, Longueur originale = 2352984.0
+Entropie = 4.806404593454912
+Taux de compression: 0.39527595597760123
+
+
+--- LZ77 Image 2 ---
+Temps d'execution :  0.110 secondes
 Longueur = 6, Longueur originale = 131072
+Taux de compression: 0.9999542236328125
 
-Image 3
-Temps d'execution :  358.189 secondes
+
+--- LZ77 + Huffman Image 2 ---
+Longueur = 8, Longueur originale = 12.0
+Entropie = 1.2516291673878228
+Taux de compression: 0.33333333333333337
+
+
+--- LZ77 Image 3 ---
+Temps d'execution :  244.880 secondes
 Longueur = 906345, Longueur originale = 872032
+Taux de compression: -0.03934832666691124
 
-Image 4
-Temps d'execution :  763.766 secondes
+
+--- LZ77 + Huffman Image 3 ---
+Longueur = 4217347, Longueur originale = 9063450.0
+Entropie = 4.5830500718151885
+Taux de compression: 0.5346863501205391
+
+
+--- LZ77 Image 4 ---
+Temps d'execution :  620.020 secondes
 Longueur = 1964925, Longueur originale = 750000
+Taux de compression: -1.6199
 
-Image 5
-Temps d'execution :  2.236 secondes
+
+--- LZ77 + Huffman Image 4 ---
+Longueur = 7626093, Longueur originale = 15719400.0
+Entropie = 3.830496345886547
+Taux de compression: 0.5148610633993664
+
+
+--- LZ77 Image 5 ---
+Temps d'execution :  0.855 secondes
 Longueur = 12897, Longueur originale = 651880
+Taux de compression: 0.9802156838681966
+
+
+--- LZ77 + Huffman Image 5 ---
+Longueur = 49514, Longueur originale = 116073.0
+Entropie = 3.7902355908353953
+Taux de compression: 0.5734236213417419
+
 
