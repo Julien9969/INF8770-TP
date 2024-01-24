@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 from copy import deepcopy
 import time
+import zlib
 
 
 
@@ -35,7 +36,7 @@ def LZ77(message:np.ndarray[int], tailleDict:int):
             decalage = tailleDict - len(symbDict) #Pour l'ajustement des indices de position quand le dictionnaire n'est pas plein.
         # print(symbDict)
         # sousChaine = message[index:len(message)-1] #Le dernier caractère sera ajouté comme 3e élément du dernier triplet
-        sousChaine = message[index:min(index+tailleDict, len(message) + tailleDict)] #Le dernier caractère sera ajouté comme 3e élément du dernier triplet
+        sousChaine = message[index:min(index+tailleDict, len(message) -1)] #Le dernier caractère sera ajouté comme 3e élément du dernier triplet
 
         # On cherche la sous-chaine la plus longue
         pos, length = 0, 0
@@ -68,7 +69,7 @@ def LZ77(message:np.ndarray[int], tailleDict:int):
 
         index += max(length+1, 1)  # Avance la position dans le message
 
-        print(triplets)
+        # print(triplets)
     return len(triplets) * 3, len(message)
 
 
@@ -79,7 +80,6 @@ def strMessageIntoInt(Message):
 
 if __name__ == '__main__':
 
-    
     # print(strMessageIntoInt("AAABCBBAAA"))
     LZ77(strMessageIntoInt("AAABCBBAAA"), 6)
     result = ""
