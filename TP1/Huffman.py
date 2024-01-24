@@ -129,9 +129,13 @@ if __name__ == "__main__":
         with open(f'TP1/data TP1/textes/texte_{i}.txt', 'r', encoding='utf-8') as f:
             Message = f.read()
         print(f'\n -----CODAGE TU TEXTE {i}: ------')
+        start = time.time()
         longueur, longueurOriginale, entropie, tauxCompression = Huffman(Message)
         result += f"Texte {i}\n"
-        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f"Entropie = {entropie}\n"
+        result += f"Taux de compression = {tauxCompression}\n"
+        result += f"Temps d'execution : {time.time() - start: .3f} secondes\n\n"
 
 
 
@@ -146,9 +150,16 @@ if __name__ == "__main__":
         #m = np.frombuffer(img.tobytes(), np.uint8)
         print(f"--- CODAGE IMAGE {i} ---")
         start = time.time()
-        Huffman(message)
-        print(f"Temps d'execution : {time.time() - start: .3f} secondes")
+        longueur, longueurOriginale, entropie, tauxCompression = Huffman(message)
+        result += f"Image {i}\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f"Entropie = {entropie}\n"
+        result += f"Taux de compression = {tauxCompression}\n"
+        result += f"Temps d'execution : {time.time() - start: .3f} secondes\n\n"
 
         # result += f"Image {i}\n"
         # result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
         # result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
+
+    with open('TP1/resultatHuffman.txt', 'w') as f:
+        f.write(result)
