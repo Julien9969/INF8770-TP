@@ -100,5 +100,5 @@ if __name__ == "__main__":
         result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
 
-    with open("resultat.txt", "w") as f:
+    with open("resultats-Alice codage.txt", "w") as f:
         f.write(result)
