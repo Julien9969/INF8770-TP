@@ -82,7 +82,6 @@ if __name__ == '__main__':
     
     # print(strMessageIntoInt("AAABCBBAAA"))
     LZ77(strMessageIntoInt("AAABCBBAAA"), 6)
-    exit()
     result = ""
 
     for i in range(1, 6):
@@ -105,7 +104,7 @@ if __name__ == '__main__':
         img = Image.open(f'data TP1/images/image_{i}.png')
         m = np.frombuffer(img.tobytes(), np.uint8)
         start = time.time()
-        longueur, longueurOriginale = LZ77(m, 4)
+        longueur, longueurOriginale = LZ77(m, 6)
         print(f"Temps d'execution : {time.time() - start: .3f} secondes")
         result += f"Image {i}\n"
         result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
