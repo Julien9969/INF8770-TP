@@ -87,8 +87,20 @@ if __name__ == '__main__':
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
         result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
 
+        message = ""
+        for triplet in triplets:
+            message += chr(triplet[0])
+            message += chr(triplet[1])
+            message += chr(triplet[2])
+        longueur, longueurOriginale, entropie, taux = Huffman.Huffman(message)
+        result += f"\n--- LZ77 + Huffman Texte {i} ---\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f"Entropie = {entropie}\n"
+        result += f'Taux de compression: {str(taux)}\n\n\n'
+
     result += "\n\n"
     for i in range(1, 6):
+        break
         print(f"--- Image {i} ---")
         img = Image.open(f'data TP1/images/image_{i}.png')
         m = np.frombuffer(img.tobytes(), np.uint8)

@@ -3,25 +3,59 @@ Temps d'execution :  0.001 secondes
 Longueur = 36, Longueur originale = 84
 Taux de compression: 0.5714285714285714
 
+
+--- LZ77 + Huffman Texte 1 ---
+Longueur = 116, Longueur originale = 144.0
+Entropie = 3.1694802116922145
+Taux de compression: 0.19444444444444442
+
+
 --- Texte 2 ---
-Temps d'execution :  0.002 secondes
+Temps d'execution :  0.001 secondes
 Longueur = 45, Longueur originale = 77
 Taux de compression: 0.4155844155844156
+
+
+--- LZ77 + Huffman Texte 2 ---
+Longueur = 150, Longueur originale = 180.0
+Entropie = 3.2879137210022598
+Taux de compression: 0.16666666666666663
+
 
 --- Texte 3 ---
 Temps d'execution :  0.002 secondes
 Longueur = 72, Longueur originale = 51
 Taux de compression: -0.41176470588235303
 
+
+--- LZ77 + Huffman Texte 3 ---
+Longueur = 253, Longueur originale = 360.0
+Entropie = 3.479364534135053
+Taux de compression: 0.2972222222222223
+
+
 --- Texte 4 ---
-Temps d'execution :  0.015 secondes
+Temps d'execution :  0.014 secondes
 Longueur = 411, Longueur originale = 182
 Taux de compression: -1.2582417582417582
+
+
+--- LZ77 + Huffman Texte 4 ---
+Longueur = 1317, Longueur originale = 2055.0
+Entropie = 3.187603385731192
+Taux de compression: 0.3591240875912409
+
 
 --- Texte 5 ---
 Temps d'execution :  0.106 secondes
 Longueur = 2967, Longueur originale = 1333
 Taux de compression: -1.225806451612903
+
+
+--- LZ77 + Huffman Texte 5 ---
+Longueur = 9712, Longueur originale = 17802.0
+Entropie = 3.256211407524455
+Taux de compression: 0.45444332097517137
 
 
 
@@ -83,5 +117,3 @@ Taux de compression: 0.9802156838681966
 Longueur = 49514, Longueur originale = 116073.0
 Entropie = 3.7902355908353953
 Taux de compression: 0.5734236213417419
-
-
