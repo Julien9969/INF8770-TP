@@ -100,7 +100,6 @@ if __name__ == '__main__':
 
     result += "\n\n"
     for i in range(1, 6):
-        break
         print(f"--- Image {i} ---")
         img = Image.open(f'data TP1/images/image_{i}.png')
         m = np.frombuffer(img.tobytes(), np.uint8)

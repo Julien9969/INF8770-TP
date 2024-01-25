@@ -86,7 +86,8 @@ if __name__ == "__main__":
         print(f"Temps d'execution : {time.time() - start: .3f} secondes")
         result += f"Texte {i}\n"
         result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
-        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n" 
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f"Taux de compression = {1 - longueur/longueurOriginale}\n\n"
     
 
     result += "\n\n"
@@ -99,6 +100,7 @@ if __name__ == "__main__":
         result += f"Image {i}\n"
         result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n\n"
-
+        result += f"Taux de compression = {1 - longueur/longueurOriginale}\n\n"
+        
     with open("resultats-Alice codage.txt", "w") as f:
         f.write(result)

@@ -1,42 +1,57 @@
 Texte 1
-Temps d'execution :  0.002 secondes
+Temps d'execution :  0.003 secondes
 Longueur = 74, Longueur originale = 84.0
+Taux de compression = 0.11904761904761907
 
 Texte 2
-Temps d'execution :  0.002 secondes
+Temps d'execution :  0.003 secondes
 Longueur = 113, Longueur originale = 154.0
+Taux de compression = 0.26623376623376627
 
 Texte 3
-Temps d'execution :  0.002 secondes
+Temps d'execution :  0.003 secondes
 Longueur = 182, Longueur originale = 204.0
+Taux de compression = 0.10784313725490191
 
 Texte 4
-Temps d'execution :  0.010 secondes
+Temps d'execution :  0.011 secondes
 Longueur = 909, Longueur originale = 910.0
+Taux de compression = 0.001098901098901095
 
 Texte 5
-Temps d'execution :  0.083 secondes
+Temps d'execution :  0.132 secondes
 Longueur = 5870, Longueur originale = 7998.0
+Taux de compression = 0.26606651662915726
 
 
 
 Image 1
-Temps d'execution :  581.149 secondes
+Temps d'execution :  480.145 secondes
 Longueur = 2078827, Longueur originale = 1560600.0
 
+Taux de compression = -0.33206907599641156
+
 Image 2
-Temps d'execution :  54.241 secondes
+Temps d'execution :  49.851 secondes
 Longueur = 4098, Longueur originale = 0.0
 
+Taux de compression = -inf
+
 Image 3
-Temps d'execution :  3033.644 secondes
+Temps d'execution :  2649.873 secondes
 Longueur = 3067726, Longueur originale = 6976256.0
 
+Taux de compression = 0.5602618367215881
+
 Image 4
-Temps d'execution :  5462.283 secondes
+Temps d'execution :  4825.681 secondes
 Longueur = 5095800, Longueur originale = 6000000.0
 
+Taux de compression = 0.15069999999999995
+
 Image 5
-Temps d'execution :  203.554 secondes
+Temps d'execution :  202.367 secondes
 Longueur = 53287, Longueur originale = 3911280.0
+
+Taux de compression = 0.9863760712605592
 
