@@ -78,12 +78,12 @@ if __name__ == '__main__':
         Message = strMessageIntoInt(Message)
         dictSize = 6
 
-        start = time.time()
+        startLZ77 = time.time()
         longueur, longueurOriginale, triplets = LZ77(Message, dictSize)
-        print(f"Temps d'execution : {time.time() - start: .3f} secondes")
+        print(f"Temps d'execution : {time.time() - startLZ77: .3f} secondes")
         
         result += f"--- Texte {i} ---\n"
-        result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
+        result += f"Temps d'execution LZ77: {time.time() - startLZ77: .3f} secondes\n"
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
         result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
 
@@ -92,19 +92,29 @@ if __name__ == '__main__':
             message += chr(triplet[0])
             message += chr(triplet[1])
             message += chr(triplet[2])
+
+        startHuffman = time.time()
         longueur, longueurOriginale, entropie, taux = Huffman.Huffman(message)
         result += f"\n--- LZ77 + Huffman Texte {i} ---\n"
+        result += f"Temps d'execution Huffman: {time.time() - startHuffman: .3f} secondes\n"
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
         result += f"Entropie = {entropie}\n"
-        result += f'Taux de compression: {str(taux)}\n\n\n'
+        result += f'Taux de compression: {str(taux)}\n\n'
+        result += f"Temps d'execution total: {time.time() - startLZ77: .3f} secondes\n\n\n"
+
 
     result += "\n\n"
     for i in range(1, 6):
         print(f"--- Image {i} ---")
         img = Image.open(f'data TP1/images/image_{i}.png')
         m = np.frombuffer(img.tobytes(), np.uint8)
-        start = time.time()
+        startLZ77 = time.time()
         longueur, longueurOriginale, triplets = LZ77(m, 6)
+        print(f"Temps d'execution : {time.time() - startLZ77: .3f} secondes")
+        result += f"--- LZ77 Image {i} ---\n"
+        result += f"Temps d'execution LZ77: {time.time() - startLZ77: .3f} secondes\n"
+        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
+        result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
 
         message = ""
         for triplet in triplets:
@@ -112,18 +122,16 @@ if __name__ == '__main__':
             message += chr(triplet[1])
             message += chr(triplet[2])
 
-        print(f"Temps d'execution : {time.time() - start: .3f} secondes")
-        result += f"--- LZ77 Image {i} ---\n"
-        result += f"Temps d'execution : {time.time() - start: .3f} secondes\n"
-        result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
-        result += f'Taux de compression: {str(1 - longueur/longueurOriginale)}\n\n'
 
         print("LZ77 done")
+        startHuffman = time.time()
         longueur, longueurOriginale, entropie, taux = Huffman.Huffman(message)
         result += f"\n--- LZ77 + Huffman Image {i} ---\n"
+        result += f"Temps d'execution Huffman: {time.time() - startHuffman: .3f} secondes\n"
         result += f"Longueur = {longueur}, Longueur originale = {longueurOriginale}\n"
         result += f"Entropie = {entropie}\n"
-        result += f'Taux de compression: {str(taux)}\n\n\n'
+        result += f'Taux de compression: {str(taux)}\n\n'
+        result += f"Temps d'execution total: {time.time() - startLZ77: .3f} secondes\n\n\n"
 
 
     with open("resultats-LZ77.txt", "w") as f:
