@@ -14,7 +14,7 @@ def question2():
             continue
 
         print(f"Processing {image}...")
-        images = kl_transform(os.path.join('data', image), show_img = True, color_space = 'RGB')
+        images = kl_transform(os.path.join('data', image), show_img = True, color_space = 'YUV')
         break
         
         # for i, img in enumerate(images):
