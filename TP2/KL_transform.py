@@ -64,6 +64,8 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
 
     if color_space == 'YUV':
         KLimage = np.clip(imageRGB, 0, 128).astype('uint8')
+        KLimage = cv2.cvtColor(KLimage, cv2.COLOR_YUV2RGB)
+
     else:
         KLimage = np.clip(imageRGB,0,255).astype('uint8')
 
