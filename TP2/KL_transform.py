@@ -46,6 +46,35 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
     # print(eigvec)
 
     eigvec = np.transpose(eigvec)
+
+    vecMoy = np.array([[MoyR], [MoyG], [MoyB]]).reshape(1,3) 
+
+    image_flat = image.reshape(height * width, 3)
+
+    diff = image_flat - vecMoy
+
+    imageKL_flat = np.dot(eigvec, diff.T).T
+    imageKL_flat = quantification(imageKL_flat)
+    invEigvec = LA.pinv(eigvec);
+
+    vecMoy =[MoyR, MoyG, MoyB]
+
+    imageRGB_flat = np.dot(invEigvec, imageKL_flat.T).T + vecMoy
+    imageRGB = imageRGB_flat.reshape(height, width, 3)
+
+    if color_space == 'YUV':
+        KLimage = np.clip(imageRGB, 0, 128).astype('uint8')
+    else:
+        KLimage = np.clip(imageRGB,0,255).astype('uint8')
+
+    if show_img:
+        py.figure(figsize = (10,10))
+        py.imshow(KLimage)
+        py.show()
+
+    return KLimage
+
+
     eigvecsansAxe0 = np.copy(eigvec)
     eigvecsansAxe0[0,:] = [0.0,0.0,0.0]
     eigvecsansAxe1 = np.copy(eigvec)
@@ -92,25 +121,27 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
         KLimage1 = np.clip(imageRGBsansAxe1,0,255).astype('uint8')
         KLimage2 = np.clip(imageRGBsansAxe2,0,255).astype('uint8')
 
-    if show_img:
-        for imageout in [KLimage0, KLimage1, KLimage2]:
-            py.figure(figsize = (10,10))
-            py.imshow(imageout)
-            py.show()
+    # if show_img:
+    #     for imageout in [KLimage0, KLimage1, KLimage2]:
+    #         py.figure(figsize = (10,10))
+    #         py.imshow(imageout)
+    #         py.show()
 
     return KLimage0, KLimage1, KLimage2
 
 
 def quantification(image, levels=[8, 8, 8]):
-    min_value = np.min(image)
-    max_value = np.max(image)
+    rounded_arr = np.zeros(image.shape)
 
-    rounded_arr = [] 
-    levels_values = np.linspace(min_value, max_value, num=2**8)
+    for i, l in enumerate(levels):
+        min_value = np.min(image[:, i])
+        max_value = np.max(image[:, i])
 
-    image = image.flatten()
+        channel = image[:, i]
 
-    for num in image:
-        nearest_val = min(levels_values, key=lambda x: abs(x - num))
-        rounded_arr.append(nearest_val)
-    return np.array(rounded_arr).reshape(height * width, 3)
+        levels_values = np.linspace(min_value, max_value, num=2**l)
+
+        nearest_vals_indices = np.abs(levels_values - channel[:, np.newaxis]).argmin(axis=1)
+        rounded_arr[:, i] = levels_values[nearest_vals_indices]
+
+    return rounded_arr
