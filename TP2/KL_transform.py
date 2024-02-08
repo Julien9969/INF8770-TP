@@ -41,9 +41,6 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
     # print(covRGB)
 
     eigval, eigvec = LA.eig(covRGB)
-    # print(eigval)
-    # print()
-    # print(eigvec)
 
     eigvec = np.transpose(eigvec)
 
