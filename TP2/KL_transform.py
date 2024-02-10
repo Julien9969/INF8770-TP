@@ -71,7 +71,7 @@ def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_
         py.imshow(KLimage)
         py.show()
 
-    # return KLimage
+    return KLimage
 
 
     eigvecsansAxe0 = np.copy(eigvec)
