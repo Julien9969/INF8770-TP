@@ -6,7 +6,7 @@ import cv2
 height = 0
 width = 0
 
-def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
+def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_space: str = 'RGB'):
     global height, width
     imagelue = cv2.imread(image)
 
@@ -71,7 +71,7 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
         py.imshow(KLimage)
         py.show()
 
-    return KLimage
+    # return KLimage
 
 
     eigvecsansAxe0 = np.copy(eigvec)
@@ -91,7 +91,7 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
     imageKLsansAxe1_flat = np.dot(eigvecsansAxe1, diff.T).T
     imageKLsansAxe2_flat = np.dot(eigvecsansAxe2, diff.T).T
 
-    print(imageKLsansAxe2_flat)
+    # print(imageKLsansAxe2_flat)
 
     imageKLsansAxe0_flat = quantification(imageKLsansAxe0_flat)
     imageKLsansAxe1_flat = quantification(imageKLsansAxe1_flat)
@@ -120,16 +120,16 @@ def kl_transform(image: str, show_img = False, color_space: str = 'RGB'):
         KLimage1 = np.clip(imageRGBsansAxe1,0,255).astype('uint8')
         KLimage2 = np.clip(imageRGBsansAxe2,0,255).astype('uint8')
 
-    # if show_img:
-    #     for imageout in [KLimage0, KLimage1, KLimage2]:
-    #         py.figure(figsize = (10,10))
-    #         py.imshow(imageout)
-    #         py.show()
+    if show_img:
+        for imageout in [KLimage0, KLimage1, KLimage2]:
+            py.figure(figsize = (10,10))
+            py.imshow(imageout)
+            py.show()
 
-    return KLimage0, KLimage1, KLimage2
+    return KLimage2
 
 
-def quantification(image, levels=[8, 8, 8]):
+def quantification(image, levels=[4, 4, 4]):
     rounded_arr = np.zeros(image.shape)
 
     for i, l in enumerate(levels):
