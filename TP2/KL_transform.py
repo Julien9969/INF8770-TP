@@ -6,7 +6,7 @@ import cv2
 height = 0
 width = 0
 
-def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_space: str = 'RGB'):
+def kl_transform(image: str, level: tuple[int,int,int], color_space: str, show_img = False):
     global height, width
     imagelue = cv2.imread(image)
 
@@ -51,7 +51,7 @@ def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_
     diff = image_flat - vecMoy
 
     imageKL_flat = np.dot(eigvec, diff.T).T
-    imageKL_flat = quantification(imageKL_flat)
+    imageKL_flat = quantification(imageKL_flat, level)
     invEigvec = LA.pinv(eigvec);
 
     vecMoy =[MoyR, MoyG, MoyB]
@@ -61,8 +61,6 @@ def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_
 
     if color_space == 'YUV':
         KLimage = np.clip(imageRGB, 0, 128).astype('uint8')
-        KLimage = cv2.cvtColor(KLimage, cv2.COLOR_YUV2RGB)
-
     else:
         KLimage = np.clip(imageRGB,0,255).astype('uint8')
 
@@ -93,9 +91,9 @@ def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_
 
     # print(imageKLsansAxe2_flat)
 
-    imageKLsansAxe0_flat = quantification(imageKLsansAxe0_flat)
-    imageKLsansAxe1_flat = quantification(imageKLsansAxe1_flat)
-    imageKLsansAxe2_flat = quantification(imageKLsansAxe2_flat)
+    # imageKLsansAxe0_flat = quantification(imageKLsansAxe0_flat, level)
+    # imageKLsansAxe1_flat = quantification(imageKLsansAxe1_flat, level)
+    imageKLsansAxe2_flat = quantification(imageKLsansAxe2_flat, level)
 
     invEigvecsansAxe0 = LA.pinv(eigvecsansAxe0);
     invEigvecsansAxe1 = LA.pinv(eigvecsansAxe1);
@@ -129,10 +127,14 @@ def kl_transform(image: str, level: tuple[int,int,int], show_img = False, color_
     return KLimage2
 
 
-def quantification(image, levels=[4, 4, 4]):
+def quantification(image, levels):
     rounded_arr = np.zeros(image.shape)
 
     for i, l in enumerate(levels):
+        if l == 0:
+            rounded_arr[:, i] = np.zeros(image[:, i].shape)
+            continue
+
         min_value = np.min(image[:, i])
         max_value = np.max(image[:, i])
 
