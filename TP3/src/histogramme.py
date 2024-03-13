@@ -95,6 +95,8 @@ for image in images:
 def cosine(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
+
+# search for the most similar images to the first image 
 def search(idx, top_k=5):
     query_vector = image_vectors[idx]
     distances = []
@@ -103,3 +105,13 @@ def search(idx, top_k=5):
     # get top k most similar images
     top_idx = np.argpartition(distances, -top_k)[-top_k:]
     return top_idx
+
+#plot the most similar images
+def plot_similar_images(idx, top_k=5):
+    similar_images = search(idx, top_k)
+    fig, axs = plt.subplots(1, top_k, figsize=(15, 4), sharey=True)
+    for i, ax in enumerate(axs):
+        ax.imshow(images[similar_images[i]])
+    plt.show()
+
+plot_similar_images(0, 5)
