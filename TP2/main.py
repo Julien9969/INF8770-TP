@@ -58,8 +58,8 @@ def question2():
 
 
     
-def question3():
-    print('Question 3')
+def question4():
+    print('Question 4')
 
     try:
         os.makedirs('results/question3/img')
@@ -70,37 +70,19 @@ def question3():
         for image_path in os.listdir('data'):
             if not image_path.endswith('.png'):
                 continue
-            
-            imageKl = kl_transform(os.path.join('data', image_path), (8, 8, 4), show_img=False, color_space='RGB')
 
             for image_path2 in os.listdir('data'):
                 if not image_path2.endswith('.png'):
                     continue
                 
-                image2 = cv2.cvtColor(cv2.imread(os.path.join('data', image_path2)), cv2.COLOR_BGR2RGB).astype('double').reshape(len(imageKl) * len(imageKl[0]), 3)
-                image2 = quantification(image2, (8, 8, 4))
-                image2 = image2.reshape(len(imageKl), len(imageKl[0]), 3)
+                mixed_image = kl_transform(os.path.join('data', image_path), (8, 8, 4), show_img=False, color_space='RGB', isq4=True, imageQ4=os.path.join('data', image_path2))
+                image2 = cv2.imread(os.path.join('data', image_path2)).astype(np.uint8)
 
-                def mix_images(image1, image2):
-                    image2 = image2.astype(image1.dtype)
-                    avg_color = np.mean(image1, axis=(0, 1))
-
-                    mask = np.zeros_like(image1)
-                    mask[:] = avg_color
-                    mask = mask.astype(image1.dtype)
-
-                    mixed_image = cv2.addWeighted(image2, 0.5, mask, 0.5, 0)
-
-                    return mixed_image
-                
-                mixed_image = mix_images(imageKl, image2)
-
-                mixed_image_uint8 = np.clip(mixed_image, 0, 255).astype(np.uint8)
-
-                psnr_val = psnr(image2.astype(np.uint8), mixed_image_uint8, data_range=255)
+                psnr_val = psnr(image2, mixed_image, data_range=255)
                 ssim_val = ssim(image2, mixed_image, multichannel=True, channel_axis=-1, data_range=mixed_image.max() - mixed_image.min())
 
                 cv2.imwrite(f'results/question3/img/{image_path[:-4]}_{image_path2[:-4]}.png', cv2.cvtColor(mixed_image, cv2.COLOR_RGB2BGR))
+                cv2.imwrite(f'results/question3/temp.png', image2)
                 sizef = os.path.getsize(f'results/question3/img/{image_path[:-4]}_{image_path2[:-4]}.png')
                 sizeOrigibal = os.path.getsize(os.path.join('data', image_path))
                 print(f"\n\nProcessing {image_path} and {image_path2}...", file=resultsFile)
@@ -111,4 +93,4 @@ def question3():
 
 if __name__ == '__main__':
     question2()
-    question3()
+    question4()
