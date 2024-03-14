@@ -4,6 +4,8 @@ import cv2, os
 import numpy as np
 import matplotlib.pyplot as plt
 
+BIN = 128
+
 # F1 score https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers
 index = []
 hist_matrix = []
@@ -20,25 +22,28 @@ def index_build(video_path = 'data/mp4/v001.mp4'):
     vidcap = cv2.VideoCapture(video_path)
     fps = vidcap.get(cv2.CAP_PROP_FPS)
     num_frames = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
-    print(fps, num_frames)
 
     # plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB)) 
     # plt.show() 
+    count = 1
+
     while True:
         _, image = vidcap.read()
         
         try:
-            red = cv2.calcHist([image], [2], None, [64], [0, 256])
-            green = cv2.calcHist([image], [1], None, [64], [0, 256])
-            blue = cv2.calcHist([image], [0], None, [64], [0, 256])
+            red = cv2.calcHist([image], [2], None, [BIN], [0, 256])
+            green = cv2.calcHist([image], [1], None, [BIN], [0, 256])
+            blue = cv2.calcHist([image], [0], None, [BIN], [0, 256])
             hist = np.concatenate((red, green, blue), axis=0)
         except:
             break 
         
         hist_matrix.append(hist)
-        index.append([video_path[-8:-4], round(vidcap.get(cv2.CAP_PROP_POS_MSEC) / 1000, 6)])
+        # index.append([video_path[-8:-4], round(vidcap.get(cv2.CAP_PROP_POS_MSEC) / 1000, 6)])
+        index.append([video_path[-8:-4], round(count/fps, 6)])
+        count += 1
 
-    print(len(hist_matrix), len(hist_matrix[0]))
+    print(f'Indexed {video_path} with {num_frames} frames')
     # plt.plot(hist_matrix[0,0:64], color='b') 
     # plt.title('Image Histogram For Blue Channel GFG') 
     # plt.show()
@@ -46,20 +51,20 @@ def index_build(video_path = 'data/mp4/v001.mp4'):
 def cosine(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
-def image_hist(image, bins=64):
+def image_hist(image):
     red = cv2.calcHist(
-        [image], [2], None, [bins], [0, 256]
+        [image], [2], None, [BIN], [0, 256]
     )
     green = cv2.calcHist(
-        [image], [1], None, [bins], [0, 256]
+        [image], [1], None, [BIN], [0, 256]
     )
     blue = cv2.calcHist(
-        [image], [0], None, [bins], [0, 256]
+        [image], [0], None, [BIN], [0, 256]
     )
     vector = np.concatenate((red, green, blue), axis=0)
     return vector
 
-def search(image_to_find: np.ndarray, top_k=5):
+def search(image_to_find: np.ndarray, top_k=1):
     distances = []
     for i, vector in enumerate(hist_matrix):
         distances.append(cosine(image_to_find.flatten(), vector.flatten()))
@@ -70,10 +75,17 @@ def search(image_to_find: np.ndarray, top_k=5):
 def QUESTION1(folder = 'data/jpeg'):
     # data = load_dataset('pinecone/image-set', split='train')
     # images = [process_fn(sample) for sample in data]
-    for i in range(1, 4):
-        index_build(f'data/mp4/v00{i}.mp4')
+    # for i in range(1, 4):
+    #     index_build(f'data/mp4/v00{i}.mp4')
+
+    index_build(f'data/mp4/v00{1}.mp4')
+    index_build(f'data/mp4/v0{50}.mp4')
+    index_build(f'data/mp4/v0{42}.mp4')
+
 
     global index, hist_matrix
+    print(f"nombre de frame dans l'index {len(index)}")
+
     hist_matrix = np.array(hist_matrix)
 
     for i, filename in enumerate(os.listdir(folder)):
@@ -89,7 +101,7 @@ def QUESTION1(folder = 'data/jpeg'):
                 vector = image_hist(rgb_image)
                 id = search(vector)
                 print(id)
-                # print(f'Image: {filename} is similar to frames: {index[id]}')
+                print(f'Image: {filename} is similar to frames: {index[id[0]]}')
 
 
 
