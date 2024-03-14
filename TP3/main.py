@@ -4,7 +4,7 @@ import cv2, os
 import numpy as np
 import matplotlib.pyplot as plt
 
-BIN = 128
+BIN = 200
 
 # F1 score https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers
 index = []
