@@ -1,17 +1,18 @@
-from datasets import load_dataset
+# from datasets import load_dataset
 from base64 import b64decode
-import cv2, os
+from cv2.typing import MatLike
+import cv2, os, csv
 import numpy as np
 import matplotlib.pyplot as plt
 # import torchvision
-import torch
+import torch, pickle
 import scipy.spatial.distance as dist
 BIN = 128
 # BIN = 150
 
 # F1 score https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers
-index = []
-hist_matrix = []
+index:list[tuple[str, float]] = []
+hist_matrix: list[MatLike] = []
 
 def process_fn(sample):
     image_bytes = b64decode(sample['image_bytes'])
@@ -56,7 +57,6 @@ def image_hist(image):
     hist = np.concatenate((red, green, blue), axis=0)
 
     # hist = cv2.calcHist([image], [0,1,2], None, [BIN, BIN, BIN], [0, 256, 0, 256, 0, 256])
-
     cv2.normalize(hist, hist)
     return hist.flatten()
 
@@ -99,10 +99,26 @@ def search_euclidean(image_to_find: np.ndarray, top_k=1):
     top_indices = [index for index, _ in distances[:top_k]]
     return top_indices
 
-def QUESTION1(folder = 'data/jpeg'):
+def save_vars():
+    global index, hist_matrix
+    with open('data/index.pkl', 'wb') as save_index:
+        pickle.dump(index, save_index)
+
+    with open('data/hist_matrix.pkl', 'wb') as save_hist:
+        pickle.dump(hist_matrix, save_hist)
+
+def load_vars():
+    global index, hist_matrix
+    with open('data/index.pkl', 'rb') as load_index:
+        index = pickle.load(load_index)
+
+    with open('data/hist_matrix.pkl', 'rb') as load_hist:
+        hist_matrix = pickle.load(load_hist)
+
+def QUESTION1(writer: csv.writer, folder = 'data/jpeg'):
     # data = load_dataset('pinecone/image-set', split='train')
     # images = [process_fn(sample) for sample in data]
-    for i in range(1, 77):
+    for i in range(1, 2):
         index_build(f'data/mp4/v{i:03d}.mp4')
 
     # index_build(f'data/mp4/v00{1}.mp4')
@@ -111,9 +127,18 @@ def QUESTION1(folder = 'data/jpeg'):
 
 
     global index, hist_matrix
-    print(f"nombre de frame dans l'index {len(index)}")
+    # save_vars()
+    load_vars()
+    print(index[0:5])
+    print(hist_matrix[0:5])
 
+    print(f"nombre de frame dans l'index {len(index)}")
     # hist_matrix = np.array(hist_matrix)
+
+    with open('data/gt.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            print(row)
 
     for i, filename in enumerate(os.listdir(folder)):
 
@@ -140,4 +165,7 @@ def QUESTION1(folder = 'data/jpeg'):
 
 
 if __name__ == '__main__':
-    QUESTION1()
+    with open('result.csv', 'w') as file:
+        writer = csv.writer(file)
+        writer.writerow(["image", "match_video", "timecode", "Evaluation"]) # Evaluation is TP, FP, TN, FN
+        QUESTION1(writer)
