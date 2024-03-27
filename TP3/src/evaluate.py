@@ -11,6 +11,17 @@ def get_parser():
 
     return parser
 
+def F1_score(file):
+    prediction = pd.read_csv(file)
+    assert prediction.shape == (1000, 4), f"Erreur: votre fichier n'a pas les bonnes dimensions"
+    assert all(prediction.columns == ['image', 'video_pred', 'minutage_pred', 'evaluation']), f"Renommez les colonnes de votre fichier en ['image', 'video_pred', 'minutage_pred']"
+
+    n_TP = np.sum(prediction['evaluation'] == 'TP')
+    n_FP = np.sum(prediction['evaluation'] == 'FP')
+    n_FN = np.sum(prediction['evaluation'] == 'FN')
+    n_FP = np.sum(prediction['evaluation'] == 'FP')
+
+    return 2 * n_TP / (2 * n_TP + n_FP + n_FN)
 
 def evaluate(file, file_gt):
     """
@@ -23,8 +34,8 @@ def evaluate(file, file_gt):
     solution = pd.read_csv(file_gt)
 
     assert solution.shape == (1000, 3), f"Erreur: le fichier gt.csv est corrompu !"
-    assert prediction.shape == solution.shape, f"Erreur: votre fichier n'a pas les bonnes dimensions : {prediction.shape} != {solution.shape}"
-    assert all(prediction.columns == ['image', 'video_pred', 'minutage_pred']), f"Renommez les colonnes de votre fichier en ['image', 'video_pred', 'minutage_pred']"
+    assert prediction.shape == (1000, 4), f"Erreur: votre fichier n'a pas les bonnes dimensions : {prediction.shape} != {solution.shape}"
+    assert all(prediction.columns == ['image', 'video_pred', 'minutage_pred', 'evaluation']), f"Renommez les colonnes de votre fichier en ['image', 'video_pred', 'minutage_pred']"
 
     df_merge = pd.merge(solution, prediction, on='image')
 
@@ -46,3 +57,4 @@ if __name__ == '__main__':
 
     print(f"Taux de bonnes réponses : {pct:0.1f}% ({n_correct}/{n_images})")
     print(f"Ecart temporel moyen : {gap:0.2f} sec")
+    print(f"F1 Score: {F1_score(args.file):0.2f}")

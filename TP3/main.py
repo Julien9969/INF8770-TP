@@ -5,14 +5,18 @@ import cv2, os, csv
 import numpy as np
 import matplotlib.pyplot as plt
 # import torchvision
-import torch, pickle
+import torch, pickle, time
 import scipy.spatial.distance as dist
-BIN = 128
-# BIN = 150
+BIN = 12
 
 # F1 score https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers
 index:list[tuple[str, float]] = []
 hist_matrix: list[MatLike] = []
+
+IMG_FOLDER = 'data/jpeg'
+VIDEO_FOLDER = 'data/mp4'
+
+F1_SCORE = 0.90
 
 def process_fn(sample):
     image_bytes = b64decode(sample['image_bytes'])
@@ -51,27 +55,17 @@ def index_build(video_path = 'data/mp4/v001.mp4'):
 
 
 def image_hist(image):
-    red = cv2.calcHist([image], [2], None, [BIN], [0, 256])
-    green = cv2.calcHist([image], [1], None, [BIN], [0, 256])
-    blue = cv2.calcHist([image], [0], None, [BIN], [0, 256])
+    red = cv2.calcHist([image], [2], None, [BIN], [0, 255])
+    green = cv2.calcHist([image], [1], None, [BIN], [0, 255])
+    blue = cv2.calcHist([image], [0], None, [BIN], [0, 255])
     hist = np.concatenate((red, green, blue), axis=0)
 
-    # hist = cv2.calcHist([image], [0,1,2], None, [BIN, BIN, BIN], [0, 256, 0, 256, 0, 256])
+    # hist = cv2.calcHist([image], [0,1,2], None, [BIN, BIN, BIN], [0, 255, 0, 255, 0, 255])
     cv2.normalize(hist, hist)
     return hist.flatten()
 
 def cosine(a, b):
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
-
-# def search(image_to_find: np.ndarray, top_k=1):
-#     distances = []
-#     for i, vector in enumerate(hist_matrix):
-#         # distances.append(dist.euclidean(image_to_find.flatten(), vector.flatten()))
-#         distances.append(cosine(image_to_find, np.array(vector)))
-#         # distances.append(dist.cosine(image_to_find, vector))
-#     # get top k most similar images
-#     top_idx = np.argpartition(distances, -top_k)[-top_k:]
-#     return top_idx
 
 def search_cosine(image_to_find: np.ndarray, top_k=1):
     global hist_matrix
@@ -82,8 +76,9 @@ def search_cosine(image_to_find: np.ndarray, top_k=1):
         distances.append((i, similarity))  # Store index and similarity
 
     distances.sort(key=lambda x: x[1], reverse=True)
+    print(distances[:1])
 
-    top_indices = [index for index, _ in distances[:top_k]]
+    top_indices = [index if distance > F1_SCORE else 'out' for index, distance in distances[:top_k]]
     return top_indices
 
 def search_euclidean(image_to_find: np.ndarray, top_k=1):
@@ -99,8 +94,12 @@ def search_euclidean(image_to_find: np.ndarray, top_k=1):
     top_indices = [index for index, _ in distances[:top_k]]
     return top_indices
 
-def save_vars():
+def save_vars(range_end=100):
     global index, hist_matrix
+
+    for i in range(1, range_end):
+        index_build(f'{VIDEO_FOLDER}/v{i:03d}.mp4')
+
     with open('data/index.pkl', 'wb') as save_index:
         pickle.dump(index, save_index)
 
@@ -115,57 +114,77 @@ def load_vars():
     with open('data/hist_matrix.pkl', 'rb') as load_hist:
         hist_matrix = pickle.load(load_hist)
 
-def QUESTION1(writer: csv.writer, folder = 'data/jpeg'):
-    # data = load_dataset('pinecone/image-set', split='train')
-    # images = [process_fn(sample) for sample in data]
-    for i in range(1, 2):
-        index_build(f'data/mp4/v{i:03d}.mp4')
+def evaluate_result(exepected, actual):
+    if actual == 'out':
+        if exepected == actual:
+            return 'TN'
+        else:
+            return 'FN'
+    else:
+        if exepected == actual:
+            return 'TP'
+        else:
+            return 'FP'
+        
+def time_delta(time1, time2):
+    return abs(time1 - time2)
 
-    # index_build(f'data/mp4/v00{1}.mp4')
-    # index_build(f'data/mp4/v0{50}.mp4')
-    # index_build(f'data/mp4/v0{42}.mp4')
-
-
+def QUESTION1(result_csv: csv.writer, folder=IMG_FOLDER):
     global index, hist_matrix
-    # save_vars()
+    # save_vars(101)
     load_vars()
-    print(index[0:5])
-    print(hist_matrix[0:5])
+    # print(index[0:5])
+    # print(hist_matrix[0:5])
 
     print(f"nombre de frame dans l'index {len(index)}")
-    # hist_matrix = np.array(hist_matrix)
 
     with open('data/gt.csv', 'r') as file:
         reader = csv.reader(file)
-        for row in reader:
-            print(row)
+        next(reader) # skip header
 
-    for i, filename in enumerate(os.listdir(folder)):
+        for i, (row, filename) in enumerate(zip(reader, os.listdir(folder))):
+            # print(row,i, filename)
+            # if i > 10: 
+            #     break
+            if filename.endswith(".jpeg"):
+                image = cv2.imread(os.path.join(folder, filename))
 
-        if i > 5:
-            break
+                vector = image_hist(image)
+                id = search_cosine(vector, 3)
+                # id = search_euclidean(vector, 3)
+                # print(id)
 
-        if filename.endswith(".jpeg"):
-            image = cv2.imread(os.path.join(folder, filename))
+                if id[0] != 'out':
 
-            # plt.imshow(image.)
-
-            # rgb_image = np.flip(image, 2)
-            vector = image_hist(image)
-            id = search_cosine(vector, 3)
-            # id = search_euclidean(vector, 3)
-            # print(id)
-            print(f'Image: {filename} is similar to frames: {index[id[0]]} and {index[id[1]]} and {index[id[2]]}')
-
-
-
-
-
-
-
+                    print(f'Image: {filename} is similar to vidéo: {index[id[0]][0]} at {index[id[0]][1]}s that is {evaluate_result(row[1], index[id[0]][0])}')
+                    # result_csv.writerow([filename, index[id[0]][0], time_delta(float(index[id[0]][1]), float(row[2])) if row[2] else '0', evaluate_result(row[1], index[id[0]][0])])
+                    result_csv.writerow([filename.replace('.jpeg', ''), index[id[0]][0], float(index[id[0]][1]) if row[2] else '0', evaluate_result(row[1], index[id[0]][0])])
+                else:
+                    print(f"Image: {filename} is not similar to any video {evaluate_result(row[1], 'out')}")
+                    result_csv.writerow([filename.replace('.jpeg', ''), 'out', '', evaluate_result(row[1], 'out')])
 
 if __name__ == '__main__':
-    with open('result.csv', 'w') as file:
+    print(BIN)
+    start = time.time()
+    with open('result.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["image", "match_video", "timecode", "Evaluation"]) # Evaluation is TP, FP, TN, FN
+        writer.writerow(['image', 'video_pred', 'minutage_pred', "evaluation"]) # Evaluation is TP, FP, TN, FN
         QUESTION1(writer)
+    print(f"Execution time: {time.time() - start} seconds")
+
+#  Bin evaluation               F1 score eval
+#  Bin = 256 -> 70.1% TP
+#  Bin = 85 -> 73.9% TP
+#  Bin = 4 -> 76.3% TP
+#  Bin = 8 -> 78.3% TP
+    
+
+#  Bin = 12 -> 78.5% TP    --> 0.9 : 85%
+    
+
+
+#  Bin = 16 -> 77.9% TP
+#  Bin = 32 -> 76.4% TP
+#  Bin = 64 -> 
+    
+# Goal: 80.5% 
