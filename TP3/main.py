@@ -3,22 +3,31 @@ import csv
 import time
 from neu_img_finder import neu_find
 from histogram_img_finder import hist_find
+from src.evaluate import eval_main
 
 if __name__ == '__main__':
-    start = time.time()
-    with open('result.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['image', 'video_pred', 'minutage_pred', "evaluation"]) # Evaluation is TP, FP, TN, FN
-        hist_find(writer)
-    print(f"Hist Execution time: {time.time() - start} seconds")
+    with open('stats.txt', 'w', newline='') as stats_file:
+        print(f"{'Hist Finder':=^50}", file=stats_file) 
+        start = time.time()
+        with open('result.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['image', 'video_pred', 'minutage_pred', "evaluation"]) # Evaluation is TP, FP, TN, FN
+            index_time, find_time = hist_find(writer)
+        eval_main('result.csv', 'data/gt.csv', stats_file)
+        print(f"Hist total Execution time: {time.time() - start} seconds", file=stats_file)
+        print(f"Hist indexation time: {index_time} seconds", file=stats_file)
+        print(f"Hist search time: {find_time} seconds", file=stats_file)
 
-
-    start = time.time()
-    with open('result_neu.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['image', 'video_pred', 'minutage_pred', "evaluation"]) # Evaluation is TP, FP, TN, FN
-        neu_find(writer)
-    print(f"Neural Execution time: {time.time() - start} seconds")
+        print(f"{'Neural Finder':=^50}", file=stats_file)
+        start = time.time()
+        with open('result_neu.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['image', 'video_pred', 'minutage_pred', "evaluation"]) # Evaluation is TP, FP, TN, FN
+            index_time, find_time = neu_find(writer)
+        eval_main('result_neu.csv', 'data/gt.csv', stats_file)
+        print(f"Neural indexation time: {index_time} seconds", file=stats_file)
+        print(f"Neural search time: {find_time} seconds", file=stats_file)
+        print(f"Neural total Execution time: {time.time() - start} seconds", file=stats_file)
 
 #  Bin evaluation               F1 score eval
 #  Bin = 256 -> 70.1% TP

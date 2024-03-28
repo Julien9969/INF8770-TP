@@ -50,6 +50,13 @@ def evaluate(file, file_gt):
     return pct, gap, n_correct, df_merge.shape[0]
 
 
+def eval_main(file, file_gt, file_stats):
+    pct, gap, n_correct, n_images = evaluate(file=file, file_gt=file_gt)
+
+    print(f"Taux de bonnes réponses : {pct:0.1f}% ({n_correct}/{n_images})", file=file_stats)
+    print(f"Ecart temporel moyen : {gap:0.2f} sec", file=file_stats)
+    print(f"F1 Score: {F1_score(file):0.2f}", file=file_stats)
+
 if __name__ == '__main__':
 
     args = get_parser().parse_args()

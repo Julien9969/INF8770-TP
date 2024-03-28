@@ -1,4 +1,4 @@
-import cv2, os, csv, pickle
+import cv2, os, csv, pickle, time
 from cv2.typing import MatLike
 import numpy as np
 
@@ -49,7 +49,6 @@ def index_build_hist(video_path = 'data/mp4/v001.mp4'):
 
     while True:
         _, image = vidcap.read()
-        
         try:
             hist = image_hist(image)
         except:
@@ -73,7 +72,6 @@ def search_cosine(image_to_find, top_k=1):
         distances.append((i, similarity))  # Store index and similarity
 
     distances.sort(key=lambda x: x[1], reverse=True)
-    print(distances[:1])
 
     top_indices = [index if distance > F1_SCORE_HIST else 'out' for index, distance in distances[:top_k]]
     return top_indices
@@ -105,11 +103,15 @@ def evaluate_result(exepected, actual):
         
 def hist_find(result_csv: csv.writer, folder=IMG_FOLDER):
     global index, hist_matrix
+    index_time = None
     try:
         load_vars()
+        index_time = 'loaded from file'
         pass
-    except:
+    except FileNotFoundError:
+        start = time.time()
         save_vars(101)
+        index_time = time.time() - start
     # load_vars()
 
     print(f"nombre de frame dans l'index {len(index)}")
@@ -117,13 +119,14 @@ def hist_find(result_csv: csv.writer, folder=IMG_FOLDER):
     with open('data/gt.csv', 'r') as file:
         reader = csv.reader(file)
         next(reader) # skip header
-
+        start = time.time()
         for i, (row, filename) in enumerate(zip(reader, os.listdir(folder))):
             if filename.endswith(".jpeg"):
                 image = cv2.imread(os.path.join(folder, filename))
 
+
                 vector = image_hist(image)
-                id = search_cosine(vector, True, 3)
+                id = search_cosine(vector, 3)
                 # id = search_euclidean(vector, 3)
 
                 if id[0] != 'out':
@@ -133,3 +136,7 @@ def hist_find(result_csv: csv.writer, folder=IMG_FOLDER):
                 else:
                     print(f"Image: {filename} is not similar to any video {evaluate_result(row[1], 'out')}")
                     result_csv.writerow([filename.replace('.jpeg', ''), 'out', '', evaluate_result(row[1], 'out')])
+        
+        find_time = time.time() - start
+    
+    return index_time, find_time

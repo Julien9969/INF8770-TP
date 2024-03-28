@@ -1,4 +1,4 @@
-import cv2, os, csv
+import cv2, os, csv, time
 import torch, pickle
 from PIL import Image
 from einops import rearrange
@@ -112,14 +112,18 @@ def evaluate_result(exepected, actual):
 def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
     global index, neural_net_matrix
     load_model()
-
+    index_time = None
     # save_vars_neu(101)
     
     try:
         load_vars_neu()
+        index_time = 'loaded from file'
         pass
-    except:
+    except FileNotFoundError:
+        start = time.time()
         save_vars_neu(101)
+        index_time = time.time() - start
+    
 
     print(f"nombre de frame dans l'index {len(index)}")
 
@@ -127,6 +131,7 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
         reader = csv.reader(file)
         next(reader) # skip header
 
+        start = time.time()
         for i, (row, filename) in enumerate(zip(reader, os.listdir(folder))):
             if filename.endswith(".jpeg"):
                 image = cv2.imread(os.path.join(folder, filename))
@@ -140,3 +145,7 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
                 else:
                     print(f"Image: {filename} is not similar to any video {evaluate_result(row[1], 'out')}")
                     result_csv.writerow([filename.replace('.jpeg', ''), 'out', '', evaluate_result(row[1], 'out')])
+
+        find_time = time.time() - start
+
+    return index_time, find_time
