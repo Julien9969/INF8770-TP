@@ -5,7 +5,7 @@ import cv2, os, csv
 import numpy as np
 import matplotlib.pyplot as plt
 # import torchvision
-import torch, pickle, time
+import pickle, time
 import scipy.spatial.distance as dist
 BIN = 12
 
@@ -34,20 +34,29 @@ def index_build(video_path = 'data/mp4/v001.mp4'):
     # plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB)) 
     # plt.show() 
     count = 1
-
+    indexed_frames = 0
     while True:
         _, image = vidcap.read()
-        
+        #if (count % 10) == 0:
         try:
-            hist = image_hist(image)
+                hist = image_hist(image)
+                indexed_frames += 1
         except:
             break 
         
         hist_matrix.append(hist)
         index.append([video_path[-8:-4], round(vidcap.get(cv2.CAP_PROP_POS_MSEC) / 1000, 6)])
         count += 1
-
-    print(f'Indexed {video_path} with {num_frames} frames')
+    # indx = 10
+    # while indx < num_frames:
+    #     vidcap.set(cv2.CAP_PROP_POS_FRAMES, indx)
+    #     _, image = vidcap.read()
+    #     hist = image_hist(image)
+    #     hist_matrix.append(hist)
+    #     index.append([video_path[-8:-4], round(vidcap.get(cv2.CAP_PROP_POS_MSEC) / 1000, 6)])
+    #     indx += 10
+    #     count += 1
+    print(f'Indexed {video_path} with {count} frames')
     # print(f'Hist shape {hist.shape}')
     # plt.plot(hist_matrix[0,0:64], color='b') 
     # plt.title('Image Histogram For Blue Channel GFG') 
@@ -96,9 +105,11 @@ def search_euclidean(image_to_find: np.ndarray, top_k=1):
 
 def save_vars(range_end=100):
     global index, hist_matrix
-
+    start_1 = time.time()
     for i in range(1, range_end):
         index_build(f'{VIDEO_FOLDER}/v{i:03d}.mp4')
+    print(f"Indexation time: {time.time() - start_1} seconds")
+    print('matrix size in bytes:', len(pickle.dumps(hist_matrix)))
 
     with open('data/index.pkl', 'wb') as save_index:
         pickle.dump(index, save_index)
@@ -131,12 +142,13 @@ def time_delta(time1, time2):
 
 def QUESTION1(result_csv: csv.writer, folder=IMG_FOLDER):
     global index, hist_matrix
-    # save_vars(101)
+    #save_vars(101)
     load_vars()
     # print(index[0:5])
     # print(hist_matrix[0:5])
 
     print(f"nombre de frame dans l'index {len(index)}")
+    times = []
 
     with open('data/gt.csv', 'r') as file:
         reader = csv.reader(file)
@@ -147,12 +159,14 @@ def QUESTION1(result_csv: csv.writer, folder=IMG_FOLDER):
             # if i > 10: 
             #     break
             if filename.endswith(".jpeg"):
+                start_2 = time.time()
                 image = cv2.imread(os.path.join(folder, filename))
-
                 vector = image_hist(image)
-                id = search_cosine(vector, 3)
-                # id = search_euclidean(vector, 3)
-                # print(id)
+                #id = search_cosine(vector, 3)
+                id = search_euclidean(vector, 3)
+                # print(id) 
+                times.append(time.time() - start_2)
+                #print(f"Image {filename} processed in {time.time() - start_2} seconds")
 
                 if id[0] != 'out':
 
@@ -162,6 +176,8 @@ def QUESTION1(result_csv: csv.writer, folder=IMG_FOLDER):
                 else:
                     print(f"Image: {filename} is not similar to any video {evaluate_result(row[1], 'out')}")
                     result_csv.writerow([filename.replace('.jpeg', ''), 'out', '', evaluate_result(row[1], 'out')])
+    
+    print(f"Average time per image: {sum(times) / len(times)} seconds")
 
 if __name__ == '__main__':
     print(BIN)

@@ -1,0 +1,30 @@
+All frames RGB, 1D, cosine: 
+    Frames in index: 37895 
+    Indexation time: 211.10257697105408 seconds
+    Execution time: 569.9512131214142 seconds
+    matrix size in bytes: 6594825
+    Average time per image: 0.3386471090316773 seconds
+    Taux de bonnes réponses : 85.2% (852/1000)
+    Ecart temporel moyen : 1.75 sec
+    F1 Score: 0.91
+
+Each 10th frame RGB, 1D, cosine:
+    Frames in index: 3731
+    Indexation time: 134.4415636062622 seconds
+    Execution time: 201.03311562538147 seconds
+    matrix size in bytes: 649402
+    Average search time per image: 0.04756212854385376 seconds
+    Taux de bonnes réponses : 85.5% (855/1000)
+    Ecart temporel moyen : 1.73 sec
+    F1 Score: 0.92
+
+All frames, RGB, 1D, Euclidian distance:
+    Frames in index: 37895 
+    Indexation time: 211.10257697105408 seconds
+    Execution time: 451.02938294410706 seconds
+    matrix size in bytes: 6594825
+    Average time per image: 0.18814177942276 seconds
+    Taux de bonnes réponses : 78.5% (785/1000)
+    Ecart temporel moyen : 1.76 sec
+    F1 Score: 0.88
+
