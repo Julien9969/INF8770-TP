@@ -1,0 +1,8 @@
+==================Neural Finder===================
+Taux de bonnes réponses : 94.2% (942/1000)
+Ecart temporel moyen : 1.18 sec
+F1 Score: 0.96
+Neural indexation time: 119.88566088676453 seconds
+Neural search time: 271.0178232192993 ms / img
+Neural total Execution time: 147.2327208518982 seconds
+Taux de compression: 0.992576829787234

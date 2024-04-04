@@ -20,6 +20,7 @@ def F1_score(file):
     n_FP = np.sum(prediction['evaluation'] == 'FP')
     n_FN = np.sum(prediction['evaluation'] == 'FN')
     n_FP = np.sum(prediction['evaluation'] == 'FP')
+    print(f"TP: {n_TP}, FP: {n_FP}, FN: {n_FN}")
 
     return 2 * n_TP / (2 * n_TP + n_FP + n_FN)
 

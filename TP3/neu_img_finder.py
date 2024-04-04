@@ -7,7 +7,8 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 
 index:list[tuple[str, float]] = []
-neural_net_matrix = torch.empty((0, 512), device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu"))
+neural_net_matrix = torch.empty((0, 512), device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")) # 512 for resnet18
+# neural_net_matrix = torch.empty((0, 2048), device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")) # 2048 for resnet50
 model = None
 preprocess = transforms.Compose([
         transforms.Resize((224, 224)),                       # change la taille de l'image en 224x224
@@ -18,6 +19,7 @@ preprocess = transforms.Compose([
 
 IMG_FOLDER = 'data/jpeg'
 VIDEO_FOLDER = 'data/mp4'
+N_IMAGES_CLEFS = 24
 
 F1_SCORE_NEU = 0.86
 
@@ -25,14 +27,17 @@ def index_build_neural_net(video_path = 'data/mp4/v001.mp4'):
     global index, neural_net_matrix
 
     vidcap = cv2.VideoCapture(video_path)
-    fps = vidcap.get(cv2.CAP_PROP_FPS)
+    # fps = vidcap.get(cv2.CAP_PROP_FPS)
     num_frames = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     count = 1
     
     while True:
         _, image = vidcap.read()
-        
+
+        if count % N_IMAGES_CLEFS != 0:
+            count += 1
+            continue
         try:
             img_desc = neu_desc(image)
         except:
@@ -43,11 +48,13 @@ def index_build_neural_net(video_path = 'data/mp4/v001.mp4'):
         count += 1
 
     print(f'Indexed {video_path} with {num_frames} frames')
+    torch.cuda.empty_cache() # libère la mémoire de la carte graphique
 
 
 
 def load_model():
     global model
+    # model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)   # le modèle est chargé avec des poids pré-entrainés sur ImageNet
     model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)   # le modèle est chargé avec des poids pré-entrainés sur ImageNet
     model = torch.nn.Sequential(*(list(model.children())[:-1]))  
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -58,7 +65,7 @@ def neu_desc(input_batch):
     global model, preprocess
     input_batch = Image.fromarray(input_batch)
     input_tensor = preprocess(input_batch)  # 3 x 224 x 224
-    input_tensor = input_tensor.unsqueeze(0).to(torch.device("cuda:0" if torch.cuda.is_available() else "cpu"))  # 1 x 3 x 224 x 224
+    input_tensor = input_tensor.to(torch.device("cuda:0" if torch.cuda.is_available() else "cpu")).unsqueeze(0)  # 1 x 3 x 224 x 224
     with torch.no_grad():
         output = model(input_tensor)  # 1 x 512 x 1 x 1 
         
@@ -69,7 +76,6 @@ def neu_desc(input_batch):
 
 def neu_cosine(mat, image_to_find):
     return torch.matmul(mat, image_to_find.t())
-     
 
 def search_cosine_neu(image_to_find, top_k=1):
     global neural_net_matrix
@@ -114,8 +120,9 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
     load_model()
     index_time = None
     # save_vars_neu(101)
-    
+    print(f"F1_SCORE_NEU: {F1_SCORE_NEU}, N_IMAGES_CLEFS: {N_IMAGES_CLEFS}")
     try:
+        raise FileNotFoundError
         load_vars_neu()
         index_time = 'loaded from file'
         pass
@@ -123,7 +130,6 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
         start = time.time()
         save_vars_neu(101)
         index_time = time.time() - start
-    
 
     print(f"nombre de frame dans l'index {len(index)}")
 
