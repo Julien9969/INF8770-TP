@@ -17,6 +17,7 @@ if __name__ == '__main__':
         print(f"Hist total Execution time: {time.time() - start} seconds", file=stats_file)
         print(f"Hist indexation time: {index_time} seconds", file=stats_file)
         print(f"Hist search time: {find_time} seconds", file=stats_file)
+        print(f"Taux de compression: {1 - os.path.getsize('data/hist_matrix.pkl') / 423e6}", file=stats_file)
 
         print(f"{'Neural Finder':=^50}", file=stats_file)
         start = time.time()
