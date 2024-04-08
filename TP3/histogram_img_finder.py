@@ -1,3 +1,6 @@
+# une grande partie du code a été pris de
+# https://www.pinecone.io/learn/series/image-search/color-histograms/
+
 import cv2, os, csv, pickle, time
 from cv2.typing import MatLike
 import numpy as np
@@ -126,8 +129,8 @@ def hist_find(result_csv: csv.writer, folder=IMG_FOLDER):
 
 
                 vector = image_hist(image)
-                id = search_cosine(vector, 3)
-                # id = search_euclidean(vector, 3)
+                #id = search_cosine(vector, 3)
+                id = search_euclidean(vector, 3)
 
                 if id[0] != 'out':
 
