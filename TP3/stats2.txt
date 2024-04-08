@@ -1,7 +1,15 @@
 ===================Hist Finder====================
-Taux de bonnes réponses : 78.5% (785/1000)
-Ecart temporel moyen : 1.76 sec
-F1 Score: 0.88
-Hist total Execution time: 205.94611144065857 seconds
+Taux de bonnes rï¿½ponses : 86.2% (862/1000)
+Ecart temporel moyen : 1.75 sec
+F1 Score: 0.92
+Hist total Execution time: 472.82111620903015 seconds
 Hist indexation time: loaded from file seconds
-Hist search time: 205.78358364105225 seconds
+Hist search time: 472.63865971565247 seconds
+==================Neural Finder===================
+Taux de bonnes rï¿½ponses : 95.5% (955/1000)
+Ecart temporel moyen : 0.61 sec
+F1 Score: 0.97
+Neural indexation time: 778.3464834690094 seconds
+Neural search time: 396.4660835266113 ms / img
+Neural total Execution time: 818.4652571678162 seconds
+Taux de compression: 0.8165262955082743

@@ -7,7 +7,19 @@ from src.evaluate import eval_main
 
 if __name__ == '__main__':
     with open('stats2.txt', 'w', newline='') as stats_file:
-        print(f"{'Hist Finder':=^50}", file=stats_file) 
+        print(f"{'Hist Finder':=^50}", file=stats_file)  
+        start = time.time()
+        with open('result.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['image', 'video_pred', 'minutage_pred', "evaluation"]) # Evaluation is TP, FP, TN, FN
+            index_time, find_time = hist_find(writer)
+        eval_main('result.csv', 'data/gt.csv', stats_file)
+        print(f"Hist total Execution time: {time.time() - start} seconds", file=stats_file)
+        print(f"Hist indexation time: {index_time} seconds", file=stats_file)
+        print(f"Hist search time: {find_time} seconds", file=stats_file)
+        print(f"Taux de compression: {1 - os.path.getsize('data/hist_matrix.pkl') / 423e6}", file=stats_file)
+
+        print(f"{'Neural Finder':=^50}", file=stats_file)
         start = time.time()
         with open('result.csv', 'w', newline='') as file:
             writer = csv.writer(file)

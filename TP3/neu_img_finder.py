@@ -19,7 +19,7 @@ preprocess = transforms.Compose([
 
 IMG_FOLDER = 'data/jpeg'
 VIDEO_FOLDER = 'data/mp4'
-N_IMAGES_CLEFS = 24
+N_IMAGES_CLEFS = 1
 
 F1_SCORE_NEU = 0.86
 
@@ -122,7 +122,6 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
     # save_vars_neu(101)
     print(f"F1_SCORE_NEU: {F1_SCORE_NEU}, N_IMAGES_CLEFS: {N_IMAGES_CLEFS}")
     try:
-        raise FileNotFoundError
         load_vars_neu()
         index_time = 'loaded from file'
         pass
@@ -155,3 +154,6 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
         find_time = time.time() - start
 
     return index_time, find_time
+
+
+
