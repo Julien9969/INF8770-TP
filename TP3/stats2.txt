@@ -1,8 +1,15 @@
+===================Hist Finder====================
+Taux de bonnes réponses : 86.2% (862/1000)
+Ecart temporel moyen : 1.75 sec
+F1 Score: 0.92
+Hist total Execution time: 472.82111620903015 seconds
+Hist indexation time: loaded from file seconds
+Hist search time: 472.63865971565247 seconds
 ==================Neural Finder===================
-Taux de bonnes réponses : 94.2% (942/1000)
-Ecart temporel moyen : 1.18 sec
-F1 Score: 0.96
-Neural indexation time: 119.88566088676453 seconds
-Neural search time: 271.0178232192993 ms / img
-Neural total Execution time: 147.2327208518982 seconds
-Taux de compression: 0.992576829787234
+Taux de bonnes réponses : 95.5% (955/1000)
+Ecart temporel moyen : 0.61 sec
+F1 Score: 0.97
+Neural indexation time: 778.3464834690094 seconds
+Neural search time: 396.4660835266113 ms / img
+Neural total Execution time: 818.4652571678162 seconds
+Taux de compression: 0.8165262955082743

@@ -122,7 +122,6 @@ def neu_find(result_csv: csv.writer, folder=IMG_FOLDER):
     # save_vars_neu(101)
     print(f"F1_SCORE_NEU: {F1_SCORE_NEU}, N_IMAGES_CLEFS: {N_IMAGES_CLEFS}")
     try:
-        raise FileNotFoundError
         load_vars_neu()
         index_time = 'loaded from file'
         pass
